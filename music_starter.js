@@ -1,43 +1,46 @@
 
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
-  background(20)
-  textFont('Verdana'); // please use CSS safe fonts
-  rectMode(CENTER)
-  textSize(24);
-  
-   let bar_spacing = height / 10;
-   let bar_height = width / 12;
-   let bar_pos_x = width / 2;
- 
+  let wallColour1 = color("#aa8453");
+  let wallColour2 = color("#5b492f");
+  let wallHeight = (height / 5) * 3;
+  background(wallColour1);
+  rectMode(CENTER);
 
-   // vocal bar is red
-   fill(200, 0, 0);
-   rect(bar_pos_x, height / 2 + 1 * bar_spacing, 4 * vocal, bar_height);
-   fill(0);
-   text("vocals", bar_pos_x, height / 2 + 1 * bar_spacing + 8);
- 
-   // drum bar is green
-   fill(0, 200, 0);
-   rect(bar_pos_x, height / 2 + 2 * bar_spacing, 4 * drum, bar_height);
-   fill(0);
-   text("drums", bar_pos_x, height / 2 + 2 * bar_spacing + 8);
- 
-   // bass bar is blue
-   fill(50, 50, 240);
-   rect(bar_pos_x, height / 2 + 3 * bar_spacing, 4 * bass, bar_height);
-   fill(0);
-   text("bass", bar_pos_x, height / 2 + 3 * bar_spacing + 8);
- 
-   // other bar is white
-   fill(200, 200, 200);
-   rect(bar_pos_x, height / 2 + 4 * bar_spacing, 4 * other, bar_height);
-   fill(0);
-   text("other", bar_pos_x, height / 2 + 4 * bar_spacing + 8);
-   fill(255, 255, 0);
- 
-   // display "words"
-   textAlign(CENTER);
-   textSize(vocal);
-   text(words, width/2, height/3);
+
+  // draws sky gradient
+  let bgColour1 = color("#fbe18d");
+  let bgColour2 = color("#c8871e");
+  
+  for (let i = 0; i < wallHeight; i++) {
+    let m = map(i, 0, wallHeight, 0, 1);
+    let newColour = lerpColor(bgColour2, bgColour1, m);
+    stroke(newColour);
+    line(0, i, width, i);
+  }
+
+
+  // draws raised wall bits
+  noStroke();
+  let topHeight = wallHeight - (height / 7);
+  let bottomHeight = topHeight + (height / 6);
+  let cornerWidth = width / 5;
+  const extraHeight = 80;
+
+  fill(wallColour2);
+  // left
+  quad(0, bottomHeight, 0, bottomHeight + extraHeight, cornerWidth, topHeight + extraHeight, cornerWidth, topHeight);
+  quad(0, wallHeight, 0, topHeight + extraHeight, cornerWidth, topHeight + extraHeight, cornerWidth, wallHeight);
+  // right
+  quad(width, bottomHeight, width, bottomHeight + extraHeight, width - cornerWidth, topHeight + extraHeight, width - cornerWidth, topHeight);
+  quad(width, wallHeight, width, topHeight + extraHeight, width - cornerWidth, topHeight + extraHeight, width - cornerWidth, wallHeight);
+
+  fill(wallColour1);
+  // left
+  triangle(0, bottomHeight, 0, topHeight, cornerWidth, topHeight);
+  // right
+  triangle(width, bottomHeight, width, topHeight, width - cornerWidth, topHeight);
+
+
+  
 }
