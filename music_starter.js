@@ -42,5 +42,39 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   triangle(width, bottomHeight, width, topHeight, width - cornerWidth, topHeight);
 
 
-  
+  // switches which "cat" it draws depending on individual channel threshold
+  let vocalRange = map(vocal, 0, 100, 0, 20);
+  let bassRange = map(bass, 0, 100, 0, 20);
+  let drumRange = map(drum, 0, 100, 0, 20);
+  let otherRange = map(other, 0, 100, 0, 20);
+
+  if (vocalRange > 12) {
+    drawCat(width / 2, wallHeight * 1.4, color(200, 0, 0));
+  } else {
+    drawCat(width / 2, wallHeight * 1.4, color(0, 200, 0));
+  }
+
+  if (bassRange > 15.5) {
+    drawCat((width / 7) * 2.5, wallHeight * 1.3, color(0, 0, 200));
+  } else {
+    drawCat((width / 7) * 2.5, wallHeight * 1.3, color(200, 200, 0));
+  }
+
+  if (drumRange > 15) {
+    drawCat(width / 2, wallHeight * 1.1, color(200, 0, 200));
+  } else {
+    drawCat(width / 2, wallHeight * 1.1, color(0, 200, 200));
+  }
+
+  if (otherRange > 16) {
+    drawCat((width / 7) * 4.5, wallHeight * 1.3, color(0, 0, 0));
+  } else {
+    drawCat((width / 7) * 4.5, wallHeight * 1.3, color(200, 200, 200));
+  }
+}
+
+
+function drawCat(x, y, colour) {
+  fill(colour);
+  ellipse(x, y, 50, 50);
 }
