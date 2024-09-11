@@ -2,20 +2,21 @@
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let catColours = [color("#e4c899"), color("#432a27"), color("#b38b6f"), color("#57433e")];
-  let wallColour1 = color("#aa8453");
-  let wallColour2 = color("#5b492f");
+  let wallColours = [color("#5b492f"), color("#aa8453")];
+  let bgColours = [color("#fbe18d"), color("#c8871e")];
+  let vocalColours = [color("#ca8573"), color("#bd9f97")]
+  let drumColours = [color("#75c27a"), color("#9ac49c")]
+  let bassColours = [color("#8cb0c2"), color("#a0c4cc"), color("#6b96bc")]
+  let otherColours = [color("#ad7bc2"), color("#d6a2e2"), color("#8f66ac")]
   let wallHeight = (height / 5) * 3;
-  background(wallColour1);
+  background(wallColours[1]);
   rectMode(CENTER);
 
 
   // draws sky gradient
-  let bgColour1 = color("#fbe18d");
-  let bgColour2 = color("#c8871e");
-  
   for (let i = 0; i < wallHeight; i++) {
     let m = map(i, 0, wallHeight, 0, 1);
-    let newColour = lerpColor(bgColour2, bgColour1, m);
+    let newColour = lerpColor(bgColours[1], bgColours[0], m);
     stroke(newColour);
     line(0, i, width, i);
   }
@@ -28,13 +29,13 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let cornerWidth = width / 5;
   const extraHeight = 80;
 
-  fill(wallColour2);
+  fill(wallColours[0]);
   quad(0, bottomHeight, 0, bottomHeight + extraHeight, cornerWidth, topHeight + extraHeight, cornerWidth, topHeight); // left
   quad(0, wallHeight, 0, topHeight + extraHeight, cornerWidth, topHeight + extraHeight, cornerWidth, wallHeight);
   quad(width, bottomHeight, width, bottomHeight + extraHeight, width - cornerWidth, topHeight + extraHeight, width - cornerWidth, topHeight); // right
   quad(width, wallHeight, width, topHeight + extraHeight, width - cornerWidth, topHeight + extraHeight, width - cornerWidth, wallHeight);
 
-  fill(wallColour1);
+  fill(wallColours[1]);
   triangle(0, bottomHeight, 0, topHeight, cornerWidth, topHeight); // left
   triangle(width, bottomHeight, width, topHeight, width - cornerWidth, topHeight); // right
 
@@ -91,6 +92,7 @@ function drawOther(x, y, catColours) {
   drawCatHead(x, y, catColours[0]);
 }
 
+
 // draws head of cat body
 function drawCatHead(x, y, colour) {
   let headWidth = 90;
@@ -113,6 +115,7 @@ function drawCatHead(x, y, colour) {
   ellipse(x - 16 + headWidth / 2, y - 62, 40, 50); // right
   ellipse(x, y - 5 - headHeight / 2, 70, 15)
 }
+
 
 // draws non-animated parts of cat body
 function drawCatMain(x, y, colour1, colour2, colour3, colour4) {
