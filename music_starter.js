@@ -48,60 +48,128 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let otherRange = map(other, 0, 100, 0, 20);
 
   if (drumRange > 15) {
-    drawDrumFull(width / 2, wallHeight * 1, catColours, drumColours);
+    drawDrumFull(width / 2, wallHeight * 1, catColours, drumColours, true);
   } else {
-    drawDrumFull(width / 2, wallHeight * 1, catColours, drumColours);
+    drawDrumFull(width / 2, wallHeight * 1, catColours, drumColours, false);
   }
 
   if (vocalRange > 12) {
-    drawVocalFull(width / 2, wallHeight * 1.4, catColours, vocalColours);
+    drawVocalFull(width / 2, wallHeight * 1.4, catColours, vocalColours, true);
   } else {
-    drawVocalFull(width / 2, wallHeight * 1.4, catColours, vocalColours);
+    drawVocalFull(width / 2, wallHeight * 1.4, catColours, vocalColours, false);
   }
 
   if (bassRange > 15.5) {
-    drawBassFull((width / 7) * 2.5, wallHeight * 1.3, catColours, bassColours);
+    drawBassFull((width / 7) * 2.5, wallHeight * 1.3, catColours, bassColours, true);
   } else {
-    drawBassFull((width / 7) * 2.5, wallHeight * 1.3, catColours, bassColours);
+    drawBassFull((width / 7) * 2.5, wallHeight * 1.3, catColours, bassColours, false);
   }
 
   if (otherRange > 16) {
-    drawOtherFull((width / 7) * 4.5, wallHeight * 1.3, catColours, otherColours);
+    drawBassFull((width / 7) * 4.5, wallHeight * 1.3, catColours, otherColours, true);
   } else {
-    drawOtherFull((width / 7) * 4.5, wallHeight * 1.3, catColours, otherColours);
+    drawBassFull((width / 7) * 4.5, wallHeight * 1.3, catColours, otherColours, false);
   }
 }
 
 // draws full volume channel representation, including cat and instrument
-function drawVocalFull(x, y, catColours, vocalColours) {
+function drawVocalFull(x, y, catColours, vocalColours, playing) {
+  let instrAngle = -50;
+  let instrTranslate = [40, 20];
+  let armAngle1 = 15;
+  let armAngle2 = 30;
+
   drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
   drawCatHead(x, y, catColours[0]);
-  drawVocal(x, y, vocalColours[0], vocalColours[1]);
+  drawCatFace(x, y, catColours[3], playing, true);
+
+  if (playing) {
+    instrAngle = -70;
+    instrTranslate = [80, -25];
+    armAngle1 = 60;
+    armAngle2 = -110;
+
+    drawCatArm(x - 38, y - 31, armAngle1, catColours[0], catColours[2]);
+    drawCatArm(x + 24, y - 28, armAngle2, catColours[0], catColours[2]);
+    drawVocal(x + instrTranslate[0], y + instrTranslate[1], instrAngle, vocalColours[0], vocalColours[1]);
+  } else {
+    drawCatArm(x - 38, y - 31, armAngle1, catColours[0], catColours[2]);
+    drawVocal(x + instrTranslate[0], y + instrTranslate[1], instrAngle, vocalColours[0], vocalColours[1]);
+    drawCatArm(x + 38, y - 31, armAngle2, catColours[0], catColours[2]);
+  }
+  
 }
 
-function drawDrumFull(x, y, catColours, drumColours) {
+function drawDrumFull(x, y, catColours, drumColours, playing) {
+  let armAngle1 = 170;
+  let armAngle2 = -170;
+
   drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
   drawCatHead(x, y, catColours[0]);
-  drawDrum(x, y, drumColours[0], drumColours[1]);
+  drawCatFace(x, y, catColours[3], playing, false);
+
+  if (playing) {
+    armAngle1 = 150;
+    armAngle2 = -145;
+
+    drawCatArm(x - 34, y - 31, armAngle1, catColours[0], catColours[2]);
+    strokeWeight(3);
+    stroke(drumColours[0]);
+    line(x - 50, y - 58, x - 26, y - 88);
+    noStroke();
+    drawCatArm(x + 15, y + 8, armAngle2, catColours[0], catColours[2]);
+    strokeWeight(3);
+    stroke(drumColours[0]);
+    line(x + 32, y - 20, x + 64, y - 44);
+    noStroke();
+    drawDrum(x, y, drumColours[0], drumColours[1]);
+  } else {
+    drawCatArm(x - 25, y + 2, armAngle1, catColours[0], catColours[2]);
+    strokeWeight(3);
+    stroke(drumColours[0]);
+    line(x - 28, y - 29, x - 37, y - 66);
+    noStroke();
+    drawCatArm(x + 25, y + 2, armAngle2, catColours[0], catColours[2]);
+    strokeWeight(3);
+    stroke(drumColours[0]);
+    line(x + 28, y - 29, x + 37, y - 66);
+    noStroke();
+    drawDrum(x, y, drumColours[0], drumColours[1]);
+  }
 }
 
-function drawBassFull(x, y, catColours, bassColours) {
-  drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
-  drawCatHead(x, y, catColours[0]);
-  drawBass(x, y, bassColours[0], bassColours[1], bassColours[2]);
-}
+function drawBassFull(x, y, catColours, instrColours, playing) {
+  let instrAngle = 80;
+  let instrTranslate = [-20, 8];
+  let armAngle1 = -10;
+  let armAngle2 = -7;
 
-function drawOtherFull(x, y, catColours, otherColours) {
   drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
   drawCatHead(x, y, catColours[0]);
-  drawBass(x, y, otherColours[0], otherColours[1], otherColours[2]);
+  drawCatFace(x, y, catColours[3], playing, false);
+  
+  if (playing) {
+    instrAngle = 50;
+    instrTranslate = [0, 0];
+    armAngle1 = -40;
+    armAngle2 = -110;
+
+    drawCatArm(x + 24, y - 28, armAngle2, catColours[0], catColours[2]);
+    drawBass(x + instrTranslate[0], y + instrTranslate[1], instrAngle, instrColours[0], instrColours[1], instrColours[2]);
+    drawCatArm(x - 28, y - 27, armAngle1, catColours[0], catColours[2]);
+  } else {
+    drawCatArm(x + 38, y - 31, armAngle2, catColours[0], catColours[2]);
+    drawBass(x + instrTranslate[0], y + instrTranslate[1], instrAngle, instrColours[0], instrColours[1], instrColours[2]);
+    drawCatArm(x - 38, y - 31, armAngle1, catColours[0], catColours[2]);
+  }
 }
 
 
 //draws instruments
-function drawVocal(x, y, colour1, colour2) {
+function drawVocal(x, y, angle, colour1, colour2) {
   push();
-  translate(x, y)
+  translate(x, y);
+  rotate(angle);
   fill(colour1);
   quad(-7, -10, 7, -10, 9, -45, -9, -45);
   fill(colour2);
@@ -198,9 +266,10 @@ function drawDrum(x, y, colour1, colour2) {
   pop();
 }
 
-function drawBass(x, y, colour1, colour2, colour3) {
+function drawBass(x, y, angle, colour1, colour2, colour3) {
   push();
   translate(x, y);
+  rotate(angle);
   fill(colour1);
   quad(13, -18, -13, -18, -20, 20, 20, 20);
   ellipse(0, 20, 40, 10);
@@ -251,7 +320,65 @@ function drawBass(x, y, colour1, colour2, colour3) {
 }
 
 
-// draws head of cat body
+// draws arm of cat
+function drawCatArm(x, y, angle, colour1, colour2) {
+  push();
+    translate(x, y);
+    rotate(angle);
+    fill(colour2);
+    ellipse(0, 0, 15, 15);
+    fill(colour1);
+    ellipse(0, 27.5, 15, 20);
+    fill(colour2);
+    rect(0, 15, 15, 25);
+  pop();
+}
+
+// draws face of cat
+function drawCatFace(x, y, colour, playing, vocalChannel) {
+  let headWidth = 90;
+  let headHeight = 70;
+  push();
+  stroke(colour);
+  strokeWeight(3);
+  noFill();
+  translate(x, y);
+
+  // ears
+  line(15 - headWidth / 2, -60 - headHeight / 2, -26, -72.8 - headHeight / 2); // left
+  line(27 - headWidth / 2, -68 - headHeight / 2, -26, -72.8 - headHeight / 2);
+  line(-15 + headWidth / 2, -60 - headHeight / 2, 26, -72.8 - headHeight / 2); // right
+  line(-27 + headWidth / 2, -68 - headHeight / 2, 26, -72.8 - headHeight / 2);
+
+  // mouth
+  arc(-5.5, -35 - headHeight / 2, 20, 30, 67, 110);
+  arc(5.5, -35 - headHeight / 2, 20, 30, 70, 113);
+
+  // eyes
+  fill(colour);
+  ellipse(-25, -24 - headHeight / 2, 10, 10);
+  ellipse(25, -24 - headHeight / 2, 10, 10);
+
+  if (playing) {
+    // eyebrows
+    line(-24, -40 - headHeight / 2, -17, -35 - headHeight / 2);
+    line(24, -40 - headHeight / 2, 17, -35 - headHeight / 2);
+
+    // open mouth
+    if (vocalChannel) {
+      quad(-6, -20 - headHeight / 2, -6, -7 - headHeight / 2, 0, -7 - headHeight / 2, 0, -20 - headHeight / 2);
+      quad(-6, -20 - headHeight / 2, -6, -7 - headHeight / 2, -9.5, -7 - headHeight / 2, -10.5, -20 - headHeight / 2);
+      quad(6, -20 - headHeight / 2, 6, -7 - headHeight / 2, 0, -7 - headHeight / 2, 0, -20 - headHeight / 2);
+      quad(6, -20 - headHeight / 2, 6, -7 - headHeight / 2, 9.5, -7 - headHeight / 2, 10.5, -20 - headHeight / 2);
+      noStroke();
+      arc(0, -6 - headHeight / 2, 21.5, 16, 0, 180);
+    }
+  }
+  pop();
+}
+
+
+// draws head of cat
 function drawCatHead(x, y, colour) {
   let headWidth = 90;
   let headHeight = 70;
