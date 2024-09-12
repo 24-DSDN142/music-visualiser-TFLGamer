@@ -11,6 +11,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let wallHeight = (height / 5) * 3;
   background(wallColours[1]);
   rectMode(CENTER);
+  strokeWeight(1);
 
 
   // draws sky gradient
@@ -47,49 +48,206 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let otherRange = map(other, 0, 100, 0, 20);
 
   if (drumRange > 15) {
-    drawDrum(width / 2, wallHeight * 1, catColours);
+    drawDrumFull(width / 2, wallHeight * 1, catColours, drumColours);
   } else {
-    drawDrum(width / 2, wallHeight * 1, catColours);
+    drawDrumFull(width / 2, wallHeight * 1, catColours, drumColours);
   }
 
   if (vocalRange > 12) {
-    drawVocal(width / 2, wallHeight * 1.4, catColours);
+    drawVocalFull(width / 2, wallHeight * 1.4, catColours, vocalColours);
   } else {
-    drawVocal(width / 2, wallHeight * 1.4, catColours);
+    drawVocalFull(width / 2, wallHeight * 1.4, catColours, vocalColours);
   }
 
   if (bassRange > 15.5) {
-    drawBass((width / 7) * 2.5, wallHeight * 1.3, catColours);
+    drawBassFull((width / 7) * 2.5, wallHeight * 1.3, catColours, bassColours);
   } else {
-    drawBass((width / 7) * 2.5, wallHeight * 1.3, catColours);
+    drawBassFull((width / 7) * 2.5, wallHeight * 1.3, catColours, bassColours);
   }
 
   if (otherRange > 16) {
-    drawOther((width / 7) * 4.5, wallHeight * 1.3, catColours);
+    drawOtherFull((width / 7) * 4.5, wallHeight * 1.3, catColours, otherColours);
   } else {
-    drawOther((width / 7) * 4.5, wallHeight * 1.3, catColours);
+    drawOtherFull((width / 7) * 4.5, wallHeight * 1.3, catColours, otherColours);
   }
 }
 
-
-function drawVocal(x, y, catColours) {
+// draws full volume channel representation, including cat and instrument
+function drawVocalFull(x, y, catColours, vocalColours) {
   drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
   drawCatHead(x, y, catColours[0]);
+  drawVocal(x, y, vocalColours[0], vocalColours[1]);
 }
 
-function drawDrum(x, y, catColours) {
+function drawDrumFull(x, y, catColours, drumColours) {
   drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
   drawCatHead(x, y, catColours[0]);
+  drawDrum(x, y, drumColours[0], drumColours[1]);
 }
 
-function drawBass(x, y, catColours) {
+function drawBassFull(x, y, catColours, bassColours) {
   drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
   drawCatHead(x, y, catColours[0]);
+  drawBass(x, y, bassColours[0], bassColours[1], bassColours[2]);
 }
 
-function drawOther(x, y, catColours) {
+function drawOtherFull(x, y, catColours, otherColours) {
   drawCatMain(x, y, catColours[0], catColours[1], catColours[2], catColours[3]);
   drawCatHead(x, y, catColours[0]);
+  drawBass(x, y, otherColours[0], otherColours[1], otherColours[2]);
+}
+
+
+//draws instruments
+function drawVocal(x, y, colour1, colour2) {
+  push();
+  translate(x, y)
+  fill(colour1);
+  quad(-7, -10, 7, -10, 9, -45, -9, -45);
+  fill(colour2);
+  ellipse(0, -54, 26, 26);
+  strokeWeight(5);
+  stroke(colour1);
+  noFill();
+  arc(0, -65, 36, 34, 55, 125);
+  pop();
+}
+
+function drawDrum(x, y, colour1, colour2) {
+  // floor tom
+  push();
+  translate(x - 50, y + 29);
+  fill(colour1);
+  rect(0, 0, 45, 50);
+  quad(-8, 16, -8, 24, -18, 35, -26, 35);
+  quad(8, 16, 8, 24, 18, 35, 26, 35);
+  fill(colour2);
+  rect(0, 0, 45, 40);
+  pop();
+
+  // snare
+  push();
+  translate(x + 50, y + 19)
+  fill(colour1);
+  rect(0, 0, 45, 30);
+  rect(0, 30, 8, 30);
+  quad(0, 26, 0, 34, -10, 45, -18, 45);
+  quad(0, 26, 0, 34, 10, 45, 18, 45);
+  fill(colour2);
+  rect(0, 0, 45, 18);
+  pop();
+
+  // tom toms
+  push();
+  translate(x - 30, y - 5);
+  rotate(7);
+  fill(colour1);
+  rect(0, 0, 45, 24);
+  fill(colour2);
+  rect(0, 0, 45, 14);
+  pop();
+  push();
+  translate(x + 30, y - 5);
+  rotate(-7);
+  fill(colour1);
+  rect(0, 0, 45, 24);
+  fill(colour2);
+  rect(0, 0, 45, 14);
+  pop();
+
+  // cymbals
+  push();
+  translate(x - 70, y - 34);
+  fill(colour1);
+  rect(0, 52, 8, 92);
+  quad(0, 79, 0, 87, -10, 98, -18, 98);
+  quad(0, 79, 0, 87, 10, 98, 18, 98);
+  rotate(15);
+  fill(colour2);
+  ellipse(0, 0, 50, 16);
+  fill(colour1);
+  ellipse(0, 0, 8, 5);
+  rotate(-15);
+  quad(-4, -1, 4, 1, 4, -5, -4, -5);
+  pop();
+  
+  push();
+  translate(x + 70, y - 34);
+  fill(colour1);
+  rect(0, 52, 8, 92);
+  quad(0, 79, 0, 87, -10, 98, -18, 98);
+  quad(0, 79, 0, 87, 10, 98, 18, 98);
+  rotate(-15);
+  fill(colour2);
+  ellipse(0, 0, 50, 16);
+  fill(colour1);
+  ellipse(0, 0, 8, 5);
+  rotate(15);
+  quad(4, -1, -4, 1, -4, -5, 4, -5);
+  pop();
+
+  // bass
+  push();
+  translate(x, y + 30);
+  fill(colour1);
+  quad(-10, 22, -10, 30, -20, 41, -28, 41);
+  quad(10, 22, 10, 30, 20, 41, 28, 41);
+  ellipse(0, 0, 75, 75);
+  fill(colour2);
+  ellipse(0, 0, 63, 63);
+  pop();
+}
+
+function drawBass(x, y, colour1, colour2, colour3) {
+  push();
+  translate(x, y);
+  fill(colour1);
+  quad(13, -18, -13, -18, -20, 20, 20, 20);
+  ellipse(0, 20, 40, 10);
+    push();
+    rotate(12);
+    ellipse(-15, 6, 10, 36);
+    rotate(-24);
+    ellipse(15, 6, 10, 36);
+    pop();
+  ellipse(-13, -28, 15, 15);
+  quad(-20.5, -28, -4.5, -28, 7, 12, -7, 12);
+  ellipse(15, -25.5, 10, 10);
+  quad(10, -25.5, 20, -25.5, 7, 12, -7, 12);
+    push();
+    strokeWeight(5);
+    stroke(colour1);
+    noFill();
+    arc(-21.5, -14, 15, 25, 300, 60);
+    arc(21.5, -14, 15, 25, 120, 240);
+    arc(5.5, -28, 15, 20, 0, 80);
+    pop();
+  fill(colour2);
+  rect(0, -48, 14, 60);
+  ellipse(0, -18, 14, 5)
+  rect(0, -2, 14, 5);
+  rect(0, 15, 14, 5);
+  ellipse(-9, -85, 7, 7);
+  ellipse(-5.5, -96, 7, 7);
+  fill(colour1);
+  rect(0, -78, 14, 6);
+  ellipse(-6.5, -78, 6, 6);
+  ellipse(6.5, -78, 6, 6);
+  ellipse(2, -96, 12, 12);
+  quad(8, -96, -4, -96, -9.5, -78, 3.5, -78);
+    push();
+    strokeWeight(5);
+    stroke(colour1);
+    noFill();
+    arc(11, -87, 15, 22, 115, 230);
+    pop();
+    push();
+    strokeWeight(2);
+    stroke(colour3);
+    line(-3, 11.5, -3, -83);
+    line(3, 11.5, 3, -94);
+    pop();
+  pop();
 }
 
 
@@ -99,6 +257,7 @@ function drawCatHead(x, y, colour) {
   let headHeight = 70;
 
   // main head
+  noStroke();
   fill(colour);
   ellipse(x, y - 70, headWidth, headHeight);
 
@@ -123,6 +282,7 @@ function drawCatMain(x, y, colour1, colour2, colour3, colour4) {
   let catHeight = 30;
 
   // main body
+  noStroke();
   fill(colour1);
   ellipse(x, y, catWidth, catHeight);
   ellipse(x + 12 - catWidth / 2, y - 2, 1 + catWidth / 3, catHeight * 2);
